@@ -1,0 +1,108 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: mirror-maker-source-config
+  namespace: demo
+stringData:
+  config.properties: |
+    name=mirror-source-connector
+    connector.class=org.apache.kafka.connect.mirror.MirrorSourceConnector
+    tasks.max=2
+    topics.exclude=.*[\-\.]internal,.*\.replica,__consumer_offsets,_internal_connectors.*,_schemas,kafka-health
+    offset-syncs.topic.replication.factor=-1
+    offset.lag.max=10 
+    replication.factor=-1
+    sync.topic.acls.enabled=false
+    replication.policy.class=org.apache.kafka.connect.mirror.IdentityReplicationPolicy
+    source.cluster.alias=source
+    source.cluster.bootstrap.servers=kafka-dev-pods.demo.svc:9092
+    security.protocol=PLAINTEXT
+    target.cluster.alias=target
+    target.cluster.bootstrap.servers=kafka-prod-pods.demo.svc:9092
+    value.converter=org.apache.kafka.connect.converters.ByteArrayConverter
+    sync.topic.configs.enabled=true
+    sync.group.offsets.enabled=true
+    key.converter=org.apache.kafka.connect.converters.ByteArrayConverter
+    source.cluster.security.protocol=PLAINTEXT
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: mirror-maker-checkpoint-config
+  namespace: demo
+stringData:
+  config.properties: |
+    name=mirror-checkpoint
+    connector.class=org.apache.kafka.connect.mirror.MirrorCheckpointConnector
+    replication.policy.class=org.apache.kafka.connect.mirror.IdentityReplicationPolicy
+    emit.checkpoints.interval.seconds=10
+    sync.group.offsets.enabled=true
+    sync.group.offsets.interval.seconds=10
+    refresh.groups.interval.seconds=10
+    source.cluster.alias=source
+    source.cluster.bootstrap.servers=kafka-dev-pods.demo.svc:9092
+    source.cluster.sasl.mechanism=PLAIN
+    security.protocol=PLAINTEXT
+    target.cluster.alias=target
+    target.cluster.bootstrap.servers=kafka-prod-pods.demo.svc:9092
+    value.converter=org.apache.kafka.connect.converters.ByteArrayConverter
+    checkpoints.topic.replication.factor=-1
+    key.converter=org.apache.kafka.connect.converters.ByteArrayConverter
+    source.cluster.security.protocol=PLAINTEXT
+    sync.group.offsets.enabled=true
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: mirror-maker-heartbeat-config
+  namespace: demo
+stringData:
+  config.properties: |
+    name=mirror-heartbeat
+    connector.class=org.apache.kafka.connect.mirror.MirrorHeartbeatConnector
+    target.cluster.alias=target
+    heartbeats.topic.replication.factor=-1
+    source.cluster.alias=source
+    target.cluster.bootstrap.servers=kafka-prod-pods.demo.svc:9092
+    value.converter=org.apache.kafka.connect.converters.ByteArrayConverter
+    key.converter=org.apache.kafka.connect.converters.ByteArrayConverter
+    source.cluster.bootstrap.servers=kafka-dev-pods.demo.svc:9092
+---
+apiVersion: kafka.kubedb.com/v1alpha1
+kind: Connector
+metadata:
+  name: mirror-source-connector
+  namespace: demo
+spec:
+  connectClusterRef:
+    name: connect-cluster
+    namespace: demo
+  configSecret:
+    name: mirror-maker-source-config
+  deletionPolicy: WipeOut
+---
+apiVersion: kafka.kubedb.com/v1alpha1
+kind: Connector
+metadata:
+  name: mirror-checkpoint
+  namespace: demo
+spec:
+  connectClusterRef:
+    name: connect-cluster
+    namespace: demo
+  configSecret:
+    name: mirror-maker-checkpoint-config
+  deletionPolicy: WipeOut
+---
+apiVersion: kafka.kubedb.com/v1alpha1
+kind: Connector
+metadata:
+  name: mirror-heartbeat
+  namespace: demo
+spec:
+  connectClusterRef:
+    name: connect-cluster
+    namespace: demo
+  configSecret:
+    name: mirror-maker-heartbeat-config
+  deletionPolicy: WipeOut

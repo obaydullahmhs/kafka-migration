@@ -1,0 +1,97 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: mm2consumer-a
+  labels:
+    app: mm2consumer-a
+spec:
+  template:
+    metadata:
+      labels:
+        app: mm2consumer-a
+    spec:
+      containers:
+        - name: mm2consumer-a
+          image: weimeilin/mm2consumer
+          env:
+            - name: CONSUMER_GROUP
+              value: "A_GROUP"
+            - name: TOPIC_TO_READ
+              value: "foo"
+            - name: BOOTSTRAP_SERVERS
+              value: "kafka-dev-pods.demo.svc:9092"
+      restartPolicy: Never
+  backoffLimit: 4
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: mm2consumer-b1
+  labels:
+    app: mm2consumer-b1
+spec:
+  template:
+    metadata:
+      labels:
+        app: mm2consumer-b1
+    spec:
+      containers:
+        - name: mm2consumer-b1
+          image: weimeilin/mm2consumer
+          env:
+            - name: CONSUMER_GROUP
+              value: "B_GROUP"
+            - name: TOPIC_TO_READ
+              value: "foo"
+            - name: BOOTSTRAP_SERVERS
+              value: "kafka-dev-pods.demo.svc:9092"
+      restartPolicy: Never
+  backoffLimit: 4
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: mm2consumer-b2
+  labels:
+    app: mm2consumer-b2
+spec:
+  template:
+    metadata:
+      labels:
+        app: mm2consumer-b2
+    spec:
+      containers:
+        - name: mm2consumer-b2
+          image: weimeilin/mm2consumer
+          env:
+            - name: CONSUMER_GROUP
+              value: "B_GROUP"
+            - name: TOPIC_TO_READ
+              value: "foo"
+            - name: BOOTSTRAP_SERVERS
+              value: "kafka-dev-pods.demo.svc:9092"
+      restartPolicy: Never
+  backoffLimit: 4
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: mm2producer
+  labels:
+    app: mm2producer
+spec:
+  template:
+    metadata:
+      labels:
+        app: mm2producer
+    spec:
+      containers:
+        - name: mm2producer
+          image: weimeilin/mm2producer
+          env:
+            - name: TOPIC_TO_SEND
+              value: "foo"
+            - name: BOOTSTRAP_SERVERS
+              value: "kafka-dev-pods.demo.svc:9092"
+      restartPolicy: Never
+  backoffLimit: 4

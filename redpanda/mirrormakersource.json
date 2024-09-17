@@ -1,0 +1,65 @@
+{
+    "connector.class": "org.apache.kafka.connect.mirror.MirrorSourceConnector",
+    "name": "mirror-source-connector",
+    "offset-syncs.topic.replication.factor": "-1",
+    "key.converter": "org.apache.kafka.connect.converters.ByteArrayConverter",
+    "value.converter": "org.apache.kafka.connect.converters.ByteArrayConverter",
+    "replication.factor": "-1",
+    "replication.policy.class": "org.apache.kafka.connect.mirror.IdentityReplicationPolicy",
+    "security.protocol": "PLAINTEXT",
+    "source.cluster.alias": "source",
+    "source.cluster.bootstrap.servers": "kafka-dev-pods.demo.svc:9092",
+    "source.cluster.sasl.mechanism": "PLAIN",
+    "source.cluster.security.protocol": "PLAINTEXT",
+    "sync.topic.acls.enabled": "false",
+    "sync.topic.configs.enabled": "true",
+    "sync.group.offsets.enabled": "true",
+    "emit.checkpoints.enabled": "true",
+    "groups": ".*",
+    "target.cluster.bootstrap.servers": "kafka-prod-pods.demo.svc:9092",
+    "topics.exclude": ".*[\\-\\.]internal,.*\\.replica,__consumer_offsets,_redpanda_e2e_probe,__redpanda.cloud.sla_verification,_internal_connectors.*,_schemas,kafka-health"
+}
+
+{
+    "connector.class": "org.apache.kafka.connect.mirror.MirrorSourceConnector",
+    "topics.exclude": ".*[\\-\\.]internal,.*\\.replica,__consumer_offsets,_redpanda_e2e_probe,__redpanda.cloud.sla_verification,_internal_connectors.*,_schemas",
+    "offset-syncs.topic.replication.factor": "-1",
+    "replication.factor": "-1",
+    "source.cluster.ssl.keystore.type": "PEM",
+    "sync.topic.acls.enabled": "false",
+    "replication.policy.class": "org.apache.kafka.connect.mirror.IdentityReplicationPolicy",
+    "source.cluster.ssl.truststore.type": "PEM",
+    "source.cluster.alias": "source",
+    "source.cluster.bootstrap.servers": "kafka:9094",
+    "source.cluster.sasl.mechanism": "PLAIN",
+    "security.protocol": "PLAINTEXT",
+    "name": "mirror-source-connector-redpanda",
+    "target.cluster.bootstrap.servers": "redpanda-0:9092",
+    "value.converter": "org.apache.kafka.connect.converters.ByteArrayConverter",
+    "sync.topic.configs.enabled": "true",
+    "key.converter": "org.apache.kafka.connect.converters.ByteArrayConverter",
+    "source.cluster.security.protocol": "PLAINTEXT"
+  }
+
+
+  ---
+  {
+	"connector.class": "org.apache.kafka.connect.mirror.MirrorSourceConnector",
+	"topics.exclude": ".*[\\-\\.]internal,.*\\.replica,__consumer_offsets,_internal_connectors.*,_schemas,kafka-health",
+	"offset-syncs.topic.replication.factor": "-1",
+	"replication.factor": "-1",
+	"sync.topic.acls.enabled": "false",
+	"tasks.max": "2",
+	"replication.policy.class": "org.apache.kafka.connect.mirror.IdentityReplicationPolicy",
+	"source.cluster.alias": "source",
+	"source.cluster.bootstrap.servers": "kafka-dev-pods.demo.svc:9092",
+	"security.protocol": "PLAINTEXT",
+	"target.cluster.alias": "target",
+	"offset.lag.max": "0",
+	"name": "mirror-source-connector",
+	"target.cluster.bootstrap.servers": "kafka-prod-pods.demo.svc:9092",
+	"value.converter": "org.apache.kafka.connect.converters.ByteArrayConverter",
+	"sync.topic.configs.enabled": "true",
+	"key.converter": "org.apache.kafka.connect.converters.ByteArrayConverter",
+	"source.cluster.security.protocol": "PLAINTEXT"
+}

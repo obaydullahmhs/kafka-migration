@@ -1,0 +1,50 @@
+{
+    "connector.class": "org.apache.kafka.connect.mirror.MirrorCheckpointConnector",
+    "name": "mirror-checkpoint",
+    "key.converter": "org.apache.kafka.connect.converters.ByteArrayConverter",
+    "value.converter": "org.apache.kafka.connect.converters.ByteArrayConverter",
+    "source.cluster.alias": "source",
+    "source.cluster.bootstrap.servers": "kafka-dev-pods.demo.svc:9092",
+    "target.cluster.alias": "target",
+    "target.cluster.bootstrap.servers": "kafka-prod-pods.demo.svc:9092",
+    "sync.group.offsets.enabled": "true",
+    "emit.checkpoints.enabled": "true"
+}
+
+{
+    "name": "mirror-checkpoint",
+    "connector.class": "org.apache.kafka.connect.mirror.MirrorCheckpointConnector",
+    "replication.policy.class": "org.apache.kafka.connect.mirror.IdentityReplicationPolicy",
+    "source.cluster.alias": "source",
+    "source.cluster.bootstrap.servers": "kafka-dev-pods.demo.svc:9092",
+    "source.cluster.sasl.mechanism": "PLAIN",
+    "security.protocol": "PLAINTEXT",
+    "target.cluster.alias": "target",
+    "target.cluster.bootstrap.servers": "kafka-prod-pods.demo.svc:9092",
+    "value.converter": "org.apache.kafka.connect.converters.ByteArrayConverter",
+    "checkpoints.topic.replication.factor": "-1",
+    "key.converter": "org.apache.kafka.connect.converters.ByteArrayConverter",
+    "source.cluster.security.protocol": "PLAINTEXT",
+    "sync.group.offsets.enabled": "true"
+}
+----
+{
+	"connector.class": "org.apache.kafka.connect.mirror.MirrorCheckpointConnector",
+	"sync.group.offsets.interval.seconds": "10",
+	"emit.checkpoints.interval.seconds": "10",
+	"replication.policy.class": "org.apache.kafka.connect.mirror.IdentityReplicationPolicy",
+	"source.cluster.alias": "source",
+	"source.cluster.bootstrap.servers": "kafka-dev-pods.demo.svc:9092",
+	"source.cluster.sasl.mechanism": "PLAIN",
+	"security.protocol": "PLAINTEXT",
+	"target.cluster.alias": "target",
+	"offset.lag.max": "1",
+	"name": "mirror-checkpoint",
+	"target.cluster.bootstrap.servers": "kafka-prod-pods.demo.svc:9092",
+	"value.converter": "org.apache.kafka.connect.converters.ByteArrayConverter",
+	"checkpoints.topic.replication.factor": "-1",
+	"key.converter": "org.apache.kafka.connect.converters.ByteArrayConverter",
+	"refresh.groups.interval.seconds": "10",
+	"source.cluster.security.protocol": "PLAINTEXT",
+	"sync.group.offsets.enabled": "true"
+}

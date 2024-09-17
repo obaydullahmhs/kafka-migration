@@ -1,0 +1,22 @@
+apiVersion: kafka.kubedb.com/v1alpha1
+kind: ConnectCluster
+metadata:
+  name: connect-cluster
+  namespace: demo
+spec:
+  disableSecurity: true
+  deletionPolicy: WipeOut
+  kafkaRef:
+    name: kafka-prod
+    namespace: demo
+  replicas: 2
+  version: 3.6.1
+  monitor:
+    agent: prometheus.io/operator
+    prometheus:
+      exporter:
+        port: 56790
+      serviceMonitor:
+        labels:
+          release: prometheus
+        interval: 10s

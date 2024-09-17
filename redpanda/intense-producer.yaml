@@ -1,0 +1,26 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: mm2producer-intense
+  labels:
+    app: mm2producer-intense
+spec:
+  template:
+    metadata:
+      labels:
+        app: mm2producer-intense
+    spec:
+      containers:
+        - name: mm2producer-intense
+          image: weimeilin/mm2producer
+          env:
+            - name: BOOTSTRAP_SERVERS
+              value: "kafka-dev-pods.demo.svc:9092"
+            - name: SLEEP_TIME
+              value: "1"
+            - name: MAX_REC
+              value: "1000"
+            - name: MIN_REC
+              value: "300"
+      restartPolicy: Never
+  backoffLimit: 4

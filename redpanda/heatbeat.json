@@ -1,0 +1,35 @@
+{
+    "connector.class": "org.apache.kafka.connect.mirror.MirrorHeartbeatConnector",
+    "name": "mirror-heartbeat",
+    "key.converter": "org.apache.kafka.connect.converters.ByteArrayConverter",
+    "value.converter": "org.apache.kafka.connect.converters.ByteArrayConverter",
+    "source.cluster.alias": "source",
+    "source.cluster.bootstrap.servers": "kafka-dev-pods.demo.svc:9092",
+    "target.cluster.alias": "target",
+    "target.cluster.bootstrap.servers": "kafka-prod-pods.demo.svc:9092"
+}
+
+{
+    "connector.class": "org.apache.kafka.connect.mirror.MirrorHeartbeatConnector",
+    "target.cluster.alias": "target",
+    "heartbeats.topic.replication.factor": "-1",
+    "name": "mirror-heartbeat-redpanda",
+    "source.cluster.alias": "source",
+    "target.cluster.bootstrap.servers": "redpanda-0:9092",
+    "value.converter": "org.apache.kafka.connect.converters.ByteArrayConverter",
+    "key.converter": "org.apache.kafka.connect.converters.ByteArrayConverter",
+    "source.cluster.bootstrap.servers": "kafka:9094"
+  }
+
+  ---
+  {
+	"connector.class": "org.apache.kafka.connect.mirror.MirrorHeartbeatConnector",
+	"target.cluster.alias": "target",
+	"heartbeats.topic.replication.factor": "-1",
+	"name": "mirror-heartbeat",
+	"source.cluster.alias": "source",
+	"target.cluster.bootstrap.servers": "kafka-prod-pods.demo.svc:9092",
+	"value.converter": "org.apache.kafka.connect.converters.ByteArrayConverter",
+	"key.converter": "org.apache.kafka.connect.converters.ByteArrayConverter",
+	"source.cluster.bootstrap.servers": "kafka-dev-pods.demo.svc:9092"
+}
